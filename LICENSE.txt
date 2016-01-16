@@ -1,0 +1,6 @@
+License
+Copyright 2016 Antioch John Sanders
+
+
+For more info on "No License" visit:
+http://choosealicense.com/licenses/no-license/

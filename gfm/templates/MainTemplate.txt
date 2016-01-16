@@ -1,0 +1,22 @@
+/**
+ * CLASSNAME
+ * @version 1.0
+ * @author
+ */
+
+import gfm.gamestate.GameState;
+import gfm.GameFrame;
+import gfm.GamePanel;
+import gfm.Game;
+
+public class CLASSNAME {
+   // draw space, different from space taken up on screen
+   public static int gameWidth = 640;
+   public static int gameHeight = 480;
+
+   public static void main(String[] args) {
+      Game game = new Game(" CLASSNAME ", gameWidth, gameHeight);
+      game.getGamePanel().getGameStateManager().setGameState("");
+      game.start();
+   }
+}
