@@ -22,6 +22,8 @@ public class Launcher {
    private String myCurrentVersion = null;
    private String myLatestVersion = null;
    private String myDownloadURL = null;
+   private int myUpgradeSize  = -1;
+   private volatile Integer myBytesDownloaded = null;
 
    private Game myGame;
 
@@ -113,6 +115,21 @@ public class Launcher {
       JOptionPane.showMessageDialog(myGame.getGamePanel(), message);
    }
 
+   public int getUpgradeSize() {
+      if ( myUpgradeSize == -1 ) {
+         try {
+            getLatestVersion();
+         } catch (UnknownHostException e) {
+            e.printStackTrace();
+         }
+      }
+      return myUpgradeSize;
+   }
+
+   public Integer getBytesDownloaded() {
+      return myBytesDownloaded;
+   }
+
    public String getLatestVersion() throws UnknownHostException {
       if ( myAvailableVerionURL == null ) {
          throw new NullPointerException("URL to get next version number from is null.");
@@ -158,6 +175,7 @@ public class Launcher {
 
          try {
             myCurrentVersion = reader.readLine();
+            myUpgradeSize = Integer.parseInt(reader.readLine());
          } catch (IOException e) {
             e.printStackTrace();
          }
@@ -185,6 +203,7 @@ public class Launcher {
       FileOutputStream fileWriter = null;
       byte[] buffer = new byte[1024 * 16];
       int n = 0;
+      myBytesDownloaded = 0;
 
       // download file
       try {
@@ -195,6 +214,7 @@ public class Launcher {
          // read downlaoad
          while ( (n = in.read(buffer)) != -1 ) {
             out.write(buffer, 0, n);
+            myBytesDownloaded += n;
          }
          // move downlaod to new file
          byte[] response = out.toByteArray();
@@ -203,6 +223,7 @@ public class Launcher {
       } catch (Exception e) {
          e.printStackTrace();
       } finally {
+         myBytesDownloaded = null;
          // close input and output
          try {
             if ( out != null ) {
