@@ -20,7 +20,7 @@ public class TwitterAuthButton extends BasicButton {
 
    public TwitterAuthButton(ActionListener listener, Vec2 pos, Vec2 size) {
       super(listener, "login", null, null, null, pos, size);
-      myBird = new ImageIcon("./quiztter/twitter-bird.png");
+      myBird = new ImageIcon(getClass().getResource("twitter-bird.png"));
       myOpacity = 0f;
    }
 
