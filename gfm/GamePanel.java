@@ -56,8 +56,12 @@ public class GamePanel extends JPanel {
       pen.drawImage(myCamera.getImage(), x0, y0, x1, y1, null);
       //Draw version information
       //pen.setFont(StringDraw.versionFont());
+
       pen.setColor(new Color(200, 255, 200, 150));
-      pen.drawString("v broke", 5, 20);
+      String version = myGame.getLauncher().getCurrentVersion();
+      if ( version != null ) {
+         pen.drawString(version, 5, 20);
+      }
    }
 
    public void draw(Graphics pen) {
