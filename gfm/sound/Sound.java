@@ -1,6 +1,5 @@
 package gfm.sound;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -44,7 +43,7 @@ public class Sound {
    private void loadSound(String filename) {
       try {
          //URL url = new URL("./" + fileName);//this.getClass().getResource(fileName);
-         URL url = new File(filename).toURI().toURL();
+         URL url = getClass().getResource(filename);
          myAudioIn = AudioSystem.getAudioInputStream(url);
          AudioFormat format = myAudioIn.getFormat();
          DataLine.Info info = new DataLine.Info(Clip.class, format);

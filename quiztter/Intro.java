@@ -97,7 +97,7 @@ public class Intro extends GameState {
    public void update() {
       if ( !myMusicStarted ) {
          myMusicStarted = true;
-         myMusic = new Sound("./quiztter/conversion", false);
+         myMusic = new Sound("/quiztter/conversion.wav", false);
          myMusic.loop();
          myMusic.play();
       }

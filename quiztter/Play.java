@@ -59,8 +59,8 @@ public class Play extends GameState {
       myHasColored = false;
       myColorStats = false;
       myQuestionsRight = 0;
-      mySoundCorrect = new Sound("./quiztter/ding", false);
-      mySoundWrong = new Sound("./quiztter/buzzer", false);
+      mySoundCorrect = new Sound("/quiztter/ding.wav", false);
+      mySoundWrong = new Sound("/quiztter/buzzer.wav", false);
    }
 
    // unique to play, for new games
@@ -98,8 +98,8 @@ public class Play extends GameState {
       getGUIManager().addButton(myAnsB);
       getGUIManager().addButton(myAnsC);
       getGUIManager().addButton(myAnsD);
-      getGUIManager().setClickSound("./quiztter/low_button");
-      getGUIManager().setHoverSound("./quiztter/high_button");
+      getGUIManager().setClickSound("/quiztter/low_button");
+      getGUIManager().setHoverSound("/quiztter/high_button");
    }
 
 
