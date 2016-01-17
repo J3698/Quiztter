@@ -1,15 +1,15 @@
 package quiztter;
 
 import java.awt.Desktop;
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
-import java.util.Scanner;
 
 import javax.swing.JOptionPane;
 
@@ -148,7 +148,7 @@ public class GTwitter {
       return popHandles[ rand.nextInt(popHandles.length) ];
    }
 
-   private ArrayList<Place> getStatuses(String handle, int toGet) {
+   private ArrayList<Place> getStatuses(String handle, int toGet) throws TwitterException {
       if ( toGet < 0 ) {
          throw new IllegalArgumentException("Can't get negative amount of statuses.");
       }
@@ -161,27 +161,22 @@ public class GTwitter {
          pagesToGet++;
       }
 
-      try {
-         for ( int p = 1; p <= toGet / 50; p++ ) {
-            page.setPage(p);
-            statuses.addAll(twitter.getUserTimeline(handle, page));
-         }
-      } catch (TwitterException e) {
-         ErrorUtil.errorToFileWithFeedback(e);
+      for ( int p = 1; p <= pagesToGet; p++ ) {
+         page.setPage(p);
+         statuses.addAll(twitter.getUserTimeline(handle, page));
       }
 
 
       return null;
    }
 
-   public static Question randomQuestion() {
+   public static Question randomQuestion() throws TwitterException {
       // if no internet
       if ( !myIsEnabled ) {
          try {
             Thread.sleep(100);
          } catch (Exception e) {
-            ErrorUtil.errorToFile(e);
-            ErrorUtil.errorAndExit("Please Send The Error File To Creator \n antiochsanders@gmail");
+            e.printStackTrace();
          }
          return new Question("Dummy Q", "A", "RightAns", "Wrong1", "Wrong2", "Wrong3");
       }
@@ -199,7 +194,7 @@ public class GTwitter {
    }
 
 
-   private static Question compareFollowersOfUsersQuestion() {
+   private static Question compareFollowersOfUsersQuestion() throws TwitterException {
       LinkedList<String> users = new LinkedList<String>();
       LinkedList<String> usersCopy = new LinkedList<String>();
       String[] mostPopUsers = new String[4];
@@ -213,23 +208,18 @@ public class GTwitter {
          usersCopy.add(nextUser);
       }
 
-      try {
-         for ( int i = 0; i < 4; i++ ) {
-            String max = users.get(0);
-            for ( String user : users ) {
-               int king = twitter.showUser(max).getFollowersCount();
-               int curr = twitter.showUser(user).getFollowersCount();
-               if ( curr > king ) {
-                  max = user;
-               }
+      for ( int i = 0; i < 4; i++ ) {
+         String max = users.get(0);
+         for ( String user : users ) {
+            int king = twitter.showUser(max).getFollowersCount();
+            int curr = twitter.showUser(user).getFollowersCount();
+            if ( curr > king ) {
+               max = user;
             }
-
-            mostPopUsers[ i ] = max;
-            users.remove(max);
          }
-      } catch (TwitterException e) {
-         ErrorUtil.errorToFile(e);
-         return null;
+
+         mostPopUsers[ i ] = max;
+         users.remove(max);
       }
 
       String questionText =
@@ -249,7 +239,7 @@ public class GTwitter {
 
 
 
-   private static Question commonWordOfUserQuestion() {
+   private static Question commonWordOfUserQuestion() throws TwitterException {
       String handle = randomHandle();
       String name = handle;
 
@@ -264,20 +254,16 @@ public class GTwitter {
       return new Question(questionText, "A", ans0, ans1, ans2, ans3);
    }
 
-   private static ArrayList<String> makeSortedListOfWordsFromTweets(String twitterHandle) {
+   private static ArrayList<String> makeSortedListOfWordsFromTweets(String twitterHandle) throws TwitterException {
       ArrayList<Status> statuses = new ArrayList<Status>();
       ArrayList<String> sortedTerms = new ArrayList<String>();
 
       Paging page = new Paging(1, 200);
       int p = 1;
-      try {
-         while ( p <= 4 ) {
-            page.setPage(p);
-            statuses.addAll(twitter.getUserTimeline(twitterHandle, page));
-            p++;
-         }
-      } catch (TwitterException e) {
-         ErrorUtil.errorToFile(e);
+      while ( p <= 4 ) {
+         page.setPage(p);
+         statuses.addAll(twitter.getUserTimeline(twitterHandle, page));
+         p++;
       }
 
       //Makes a list of words from user timeline
@@ -315,25 +301,32 @@ public class GTwitter {
 
 
    private static ArrayList<String> removeCommonEnglishWords (ArrayList<String> list, String twitterHandle) {
-      Scanner scanner = null;
+      BufferedReader inFile = null;
 
       try {
-         scanner = new Scanner(new File("./quiztter/commonWords.txt"));
+         inFile = new BufferedReader(
+               new InputStreamReader(ClassLoader.getSystemResourceAsStream("./quiztter/commonWords.txt")));
 
-         while ( scanner.hasNextLine() ) {
-            String toRemove = scanner.nextLine().toLowerCase();
-            while ( list.contains(toRemove) ) {
-               list.remove(toRemove);
-            }
-
-            while ( list.contains(twitterHandle.toLowerCase()) ) {
-               list.remove(twitterHandle.toLowerCase());
+         String toRemove;
+         while ( (toRemove = inFile.readLine()) != null ) {
+            while ( list.contains(toRemove.toLowerCase()) ) {
+               list.remove(toRemove.toLowerCase());
             }
          }
+
+         while ( list.contains(twitterHandle.toLowerCase()) ) {
+            list.remove(twitterHandle.toLowerCase());
+         }
       } catch (Exception e) {
-         ErrorUtil.errorToFile(e);
+         e.printStackTrace();
       } finally {
-         scanner.close();
+         if ( inFile != null ) {
+            try {
+               inFile.close();
+            } catch (IOException e) {
+               e.printStackTrace();
+            }
+         }
       }
 
       return list;
@@ -346,7 +339,7 @@ public class GTwitter {
       Collections.sort(sortedTerms);
    }
 
-   public static ArrayList<WordAndInt> mostPopularWords(String twitterHandle) {
+   public static ArrayList<WordAndInt> mostPopularWords(String twitterHandle) throws TwitterException {
       ArrayList<String> sortedTerms = makeSortedListOfWordsFromTweets(twitterHandle);
       ArrayList<WordAndInt> words = new ArrayList<WordAndInt>();
 
