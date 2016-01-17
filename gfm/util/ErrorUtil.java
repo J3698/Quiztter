@@ -53,5 +53,7 @@ public class ErrorUtil {
             newPrint.close();
          }
       }
+      error("Something Happened...");
+      System.exit(0);
    }
 }
