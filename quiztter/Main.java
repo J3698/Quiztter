@@ -49,6 +49,7 @@ public class Main {
       Game game = new Game("Quiztter", gameWidth, gameHeight);
       game.setGameState("intro");
 
+      // handle versioning
       String currentVersionURL = "/quiztter/version.txt";
       String newVersionURL = "https://raw.githubusercontent.com/J3698/Quiztter/master/quiztter/version.txt";
       String downloadURL = "https://raw.githubusercontent.com/J3698/Quiztter/master/release/Quiztter.jar";
@@ -77,10 +78,12 @@ public class Main {
       // initialize and add game states
       GameState pininput = new PinInput(game);
       GameState intro = new Intro(game);
+      GameState upgrade = new Upgrade(game);
       GameState loadingQuestions = new LoadingQuestions(game, "load");
       GameState play = new Play(game, 10, 3);
       GameState gameOver = new GameOver(game, "over");
       game.addGameState(intro);
+      game.addGameState(upgrade);
       game.addGameState(pininput);
       game.addGameState(loadingQuestions);
       game.addGameState(play);

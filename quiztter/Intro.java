@@ -68,20 +68,25 @@ public class Intro extends GameState {
       myAuthButton = new TwitterAuthButton(new AuthTwitterListener(), pos, size);
 
       if ( !getGame().getLauncher().isLatestVersion() ) {
-         myUpgradeButton = new SimpleButton(new UpgradeListener(), "UPGRADE!",
+         myUpgradeButton = new SimpleButton(new UpgradeListener(), "UPGRADE",
                new Color(150, 0, 0, 150), Color.white, new Font("Ariel", 1, 12),
-               new Vec2(340, 455), new Vec2(60, 30));
+               new Vec2(240, 445), new Vec2(70, 35));
          myUpgradeButton.getPosition().addY(100);
+         getGUIManager().addButton(myUpgradeButton);
+
+         myCreditsButton = new SimpleButton(new CreditsListener(), "CREDITS",
+               new Color(0, 0, 0, 0), Color.white, new Font("Ariel", 1, 12),
+               new Vec2(330, 447), new Vec2(60, 30));
+      } else  {
+         myCreditsButton = new SimpleButton(new CreditsListener(), "CREDITS",
+               new Color(0, 0, 0, 0), Color.white, new Font("Ariel", 1, 12),
+               new Vec2(290, 455), new Vec2(60, 30));
       }
 
-      myCreditsButton = new SimpleButton(new CreditsListener(), "CREDITS",
-            new Color(0, 0, 0, 0), Color.white, new Font("Ariel", 1, 12),
-            new Vec2(290, 455), new Vec2(60, 30));
       myCreditsButton.getPosition().addY(100);
       getGUIManager().addButton(myCreditsButton);
    }
 
-   // sorry for bad code here :P
    @Override
    public void draw(Graphics pen) {
       int width = getGame().width();
@@ -125,6 +130,10 @@ public class Intro extends GameState {
          if ( !loginButtonCreated ) {
             getGUIManager().addButton(myAuthButton);
             myCreditsButton.getPosition().subY(100);
+            if ( myUpgradeButton != null ) {
+               myUpgradeButton.getPosition().subY(100);
+            }
+
             loginButtonCreated = true;
          }
       }
@@ -148,7 +157,7 @@ public class Intro extends GameState {
    class UpgradeListener implements ActionListener {
       @Override
       public void actionPerformed(ActionEvent event) {
-         getGame().setGameState("");
+         getGame().setGameState("upgrade");
       }
    }
 
