@@ -37,23 +37,6 @@ public class GTwitter {
          "Android"
    };
 
-   public static void main(String[] args) {
-      init();
-      pointUserToAuthURL();
-      String pin = new Scanner(System.in).next();
-      authenticate(pin);      
-
-      for ( int i = 0; i < 100; i++ ) {
-         Question q = randomQuestion();
-         q.randomize();
-         System.out.println(q.getQuestion());
-         System.out.println(q.getChoiceA());
-         System.out.println(q.getChoiceC());
-         System.out.println(q.getChoiceB());
-         System.out.println(q.getChoiceD());
-      }
-   }
-
    private static boolean myIsEnabled = true;
 
    // Very secret
