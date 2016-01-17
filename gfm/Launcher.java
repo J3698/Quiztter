@@ -8,6 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
 
@@ -19,6 +20,7 @@ public class Launcher {
    private String myAvailableVerionURL = null;
    private String myVersionURL = null;
    private String myCurrentVersion = null;
+   private String myLatestVersion = null;
    private String myDownloadURL = null;
 
    private Game myGame;
@@ -27,10 +29,22 @@ public class Launcher {
       myGame = game;
    }
 
+   public void initVersioning(String versionURL, String newVersionURL, String downloadURL) throws UnknownHostException {
+      myVersionURL = versionURL;
+      myAvailableVerionURL = newVersionURL;
+      myDownloadURL = downloadURL;
+      getLatestVersion();
+      getCurrentVersion();
+   }
+
    public boolean isLatestVersion() {
       // get arrays of decimal places for versions
-      String rawCurrentVers = getCurrentVersion();
-      String rawLatestVers = getLatestVersion();
+      if ( myLatestVersion == null || myCurrentVersion == null ) {
+         return true;
+      }
+
+      String rawLatestVers = myLatestVersion;
+      String rawCurrentVers = myCurrentVersion;
 
       // quit if latest version returns non digits
       for ( int index = 0; index < rawLatestVers.length(); index++ ) {
@@ -100,7 +114,7 @@ public class Launcher {
       JOptionPane.showMessageDialog(myGame.getGamePanel(), message);
    }
 
-   public String getLatestVersion() {
+   public String getLatestVersion() throws UnknownHostException {
       if ( myAvailableVerionURL == null ) {
          throw new NullPointerException("URL to get next version number from is null.");
       }
@@ -116,12 +130,12 @@ public class Launcher {
          fromWeb = new BufferedReader(
                new InputStreamReader(latestVersionURL.openStream()));
          latestVersion = fromWeb.readLine();
-      } catch (UnknownHostException e) {
-         return "Couldn't connect to server.";
-      } catch (Exception e) {
-         // print errors
+      } catch (MalformedURLException e) {
          e.printStackTrace();
-         return "Error.";
+         return null;
+      } catch (IOException e) {
+         e.printStackTrace();
+         return null;
       } finally {
          try {
             // close reader
@@ -154,13 +168,13 @@ public class Launcher {
 
    public boolean downloadLatestVersion() {
       // set variables for creating file name
-      String fileName = "TwoP" + ("" + getLatestVersion()).replace(".", "_") + ".jar";
+      String fileName = "TwoP" + ("" + myLatestVersion).replace(".", "_") + ".jar";
       File file = new File(fileName);
       int number = 0;
       // get available file name
       while ( file.exists() && !file.isDirectory() ) {
          number++;
-         fileName = "TwoP" + ("" + getLatestVersion()).replace(".", "_") + "(" + number + ")" + ".jar";
+         fileName = "TwoP" + ("" + myLatestVersion).replace(".", "_") + "(" + number + ")" + ".jar";
          file = new File(fileName);
       }
 
@@ -208,6 +222,5 @@ public class Launcher {
       return true;
    }
 
-   public void setDownloadURL(String URL) { myDownloadURL = URL; }
    public String getDownloadURL() { return myDownloadURL; }
 }
