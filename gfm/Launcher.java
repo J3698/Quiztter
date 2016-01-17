@@ -80,7 +80,6 @@ public class Launcher {
             message("Current version number failed to be read: " + rawCurrentVers);
             break;
          }
-
          // get next nubmers to compare
          currentVersInt = Integer.parseInt(currentVers[index]);
          latestVersInt = Integer.parseInt(latestVers[index]);
@@ -146,7 +145,8 @@ public class Launcher {
          }
       }
       // return latest version number
-      return latestVersion;
+      myLatestVersion = latestVersion;
+      return myLatestVersion;
    }
 
    public String getCurrentVersion() {
@@ -168,7 +168,7 @@ public class Launcher {
 
    public boolean downloadLatestVersion() {
       // set variables for creating file name
-      String fileName = "TwoP" + ("" + myLatestVersion).replace(".", "_") + ".jar";
+      String fileName = "Quiztter" + ("" + myLatestVersion).replace(".", "_") + ".jar";
       File file = new File(fileName);
       int number = 0;
       // get available file name

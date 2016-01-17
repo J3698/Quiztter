@@ -60,7 +60,7 @@ public class GamePanel extends JPanel {
       pen.setColor(new Color(200, 255, 200, 150));
       String version = myGame.getLauncher().getCurrentVersion();
       if ( version != null ) {
-         pen.drawString(version, 5, 20);
+         pen.drawString("v " + version, 5, 20);
       }
    }
 
