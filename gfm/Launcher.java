@@ -5,20 +5,21 @@ import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.plaf.ColorUIResource;
 
 public class Launcher {
    private static final String digits = "0123456789";
 
-   private static String currentVersion = null;
-   private static String myDownloadURL = null;
+   private String myAvailableVerionURL = null;
+   private String myVersionURL = null;
+   private String myCurrentVersion = null;
+   private String myDownloadURL = null;
 
    private Game myGame;
 
@@ -32,9 +33,9 @@ public class Launcher {
       String rawLatestVers = getLatestVersion();
 
       // quit if latest version returns non digits
-      for (int index = 0; index < rawLatestVers.length(); index++) {
+      for ( int index = 0; index < rawLatestVers.length(); index++ ) {
          boolean containsNonDigit = digits.indexOf(rawLatestVers.charAt(index)) == -1;
-         if (containsNonDigit && rawLatestVers.charAt(index) != '.') {
+         if ( containsNonDigit && rawLatestVers.charAt(index) != '.' ) {
             message("Latest version number failed to be read:" + rawLatestVers);
             return true;
          }
@@ -50,19 +51,19 @@ public class Launcher {
       int latestVersInt;
 
       // compare until we run out of decimal places
-      while (index != currentVers.length && index != latestVers.length) {
+      while ( index != currentVers.length && index != latestVers.length ) {
 
          // inform of formatting errors
          boolean latestNumFailed = latestVers[index].equals("");
          boolean currentNumFailed = currentVers[index].equals("");
-         if (latestNumFailed && currentNumFailed) {
+         if ( latestNumFailed && currentNumFailed ) {
             message("Version numbers failed to be read");
             break;
-         } else if (latestNumFailed) {
-            message("Latest version number failed to be read:" + rawLatestVers);
+         } else if ( latestNumFailed ) {
+            message("Latest version number failed to be read: " + rawLatestVers);
             break;
-         } else if (currentNumFailed) {
-            message("Current version number failed to be read:" + rawCurrentVers);
+         } else if ( currentNumFailed ) {
+            message("Current version number failed to be read: " + rawCurrentVers);
             break;
          }
 
@@ -70,25 +71,27 @@ public class Launcher {
          currentVersInt = Integer.parseInt(currentVers[index]);
          latestVersInt = Integer.parseInt(latestVers[index]);
          // compare numbers
-         if (currentVersInt > latestVersInt) {
+         if ( currentVersInt > latestVersInt ) {
             message("No new updates.");
             return true;
-         } else if (currentVersInt < latestVersInt) {
+         } else if ( currentVersInt < latestVersInt ) {
             return false;
          }
          // move to next index
          index++;
       }
+
       // handle if indices have been exhausted
-      if (index == currentVers.length && index == latestVers.length) {
+      if ( index == currentVers.length && index == latestVers.length ) {
          message("No new updates.");
          return true;
-      } else if (index == currentVers.length) {
+      } else if ( index == currentVers.length ) {
          return false;
-      } else if (index == latestVers.length) {
+      } else if ( index == latestVers.length ) {
          message("No new updates.");
          return true;
       }
+
       // because we need a return statement
       return true;
    }
@@ -98,6 +101,10 @@ public class Launcher {
    }
 
    public String getLatestVersion() {
+      if ( myAvailableVerionURL == null ) {
+         throw new NullPointerException("URL to get next version number from is null.");
+      }
+
       // declare URL, reader and version number
       URL latestVersionURL;
       BufferedReader fromWeb = null;
@@ -105,11 +112,11 @@ public class Launcher {
 
       try {
          // get latest version
-         latestVersionURL = new URL("https://raw.githubusercontent.com/J3698/TwoP/master/current.version");
+         latestVersionURL = new URL(myAvailableVerionURL);
          fromWeb = new BufferedReader(
                new InputStreamReader(latestVersionURL.openStream()));
          latestVersion = fromWeb.readLine();
-      } catch(UnknownHostException e) {
+      } catch (UnknownHostException e) {
          return "Couldn't connect to server.";
       } catch (Exception e) {
          // print errors
@@ -118,7 +125,7 @@ public class Launcher {
       } finally {
          try {
             // close reader
-            if (fromWeb != null) { fromWeb.close(); }
+            if ( fromWeb != null ) { fromWeb.close(); }
          } catch (Exception e) {
             // print errors
             e.printStackTrace();
@@ -128,8 +135,21 @@ public class Launcher {
       return latestVersion;
    }
 
-   public static String getCurrentVersion() {
-      return currentVersion.toString();
+   public String getCurrentVersion() {
+      if ( myCurrentVersion != null ) {
+         return myCurrentVersion;
+      } else {
+         InputStreamReader stream  = new InputStreamReader(getClass().getResourceAsStream(myVersionURL));
+         BufferedReader reader = new BufferedReader(stream);
+
+         try {
+            myCurrentVersion = reader.readLine();
+         } catch (IOException e) {
+            e.printStackTrace();
+         }
+
+         return myCurrentVersion;
+      }
    }
 
    public boolean downloadLatestVersion() {
@@ -138,7 +158,7 @@ public class Launcher {
       File file = new File(fileName);
       int number = 0;
       // get available file name
-      while (file.exists() && !file.isDirectory()) {
+      while ( file.exists() && !file.isDirectory() ) {
          number++;
          fileName = "TwoP" + ("" + getLatestVersion()).replace(".", "_") + "(" + number + ")" + ".jar";
          file = new File(fileName);
@@ -159,34 +179,31 @@ public class Launcher {
          in = new BufferedInputStream(downloadSite.openStream());
          out = new ByteArrayOutputStream();
          // read downlaoad
-         while ((n = in.read(buffer)) != -1) {
+         while ( (n = in.read(buffer)) != -1 ) {
             out.write(buffer, 0, n);
          }
          // move downlaod to new file
          byte[] response = out.toByteArray();
          fileWriter = new FileOutputStream(fileName);
          fileWriter.write(response);
-      } catch(Exception e) {
+      } catch (Exception e) {
          e.printStackTrace();
       } finally {
          // close input and output
          try {
-            if (out != null) {
+            if ( out != null ) {
                out.close();
             }
-            if (in != null) {
+            if ( in != null ) {
                in.close();
             }
-            if (fileWriter != null) {
+            if ( fileWriter != null ) {
                fileWriter.close();
             }
          } catch (Exception e) {
             e.printStackTrace();
          }
       }
-
-      message("Check the folder containing this jar for "
-            + "the latest version of TwoP!");
 
       return true;
    }

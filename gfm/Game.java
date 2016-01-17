@@ -11,11 +11,13 @@ public class Game {
 
    private GamePanel myGamePanel;
    private GameFrame myGameFrame;
+   private Launcher myLauncher;
 
    public Game(String name, int gameWidth, int gameHeight) {
       myName = name;
       myGamePanel = new GamePanel(this, gameWidth, gameHeight, "");
       myGameFrame = new GameFrame(name, myGamePanel);
+      myLauncher = new Launcher(this);
    }
 
    public void setGameState(String gameState) {
@@ -72,4 +74,5 @@ public class Game {
    public String getName() { return myName; }
    public GamePanel getGamePanel() { return myGamePanel; }
    public GameFrame getGameFrame() { return myGameFrame; }
+   public Launcher getLauncher() { return myLauncher; }
 }
