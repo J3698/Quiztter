@@ -49,10 +49,12 @@ public class Main {
       Game game = new Game("Quiztter", gameWidth, gameHeight);
       game.setGameState("intro");
 
+      String currentVersionURL = "/quiztter/version.txt";
+      String newVersionURL = "https://raw.githubusercontent.com/J3698/Quiztter/master/quiztter/version.txt";
+      String downloadURL = "https://raw.githubusercontent.com/J3698/Quiztter/master/release/Quiztter.jar";
       try {
-         game.getLauncher().initVersioning();
+         game.getLauncher().initVersioning(currentVersionURL, newVersionURL, downloadURL);
       } catch (UnknownHostException e) {
-         // TODO Auto-generated catch block
          e.printStackTrace();
       }
 
