@@ -2,6 +2,9 @@ package quiztter;
 
 import java.util.LinkedList;
 
+import gfm.util.ErrorUtil;
+import twitter4j.TwitterException;
+
 public class QuestionManager {
    private int myQuestionsAGame;
    private LinkedList<Question> myQuestions;
@@ -42,7 +45,14 @@ public class QuestionManager {
    public Question generateQuestion() {
       Question newQuestion = null;
       while ( newQuestion == null ) {
-         newQuestion = GTwitter.randomQuestion();
+         try {
+            newQuestion = GTwitter.randomQuestion();
+         } catch (TwitterException e) {
+            e.printStackTrace();
+            if ( e.exceededRateLimitation() ) {
+               ErrorUtil.errorAndExit("Twitter API Limit reached - try again later.");
+            }
+         }
       }
 
       newQuestion.randomize();
