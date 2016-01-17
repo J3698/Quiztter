@@ -79,15 +79,14 @@ public class Main {
       // add maouse macro
       game.addMacro(new TwitterMouseMacro());
 
-      // add overlay buttons
-      GUIManager macroGUI = new GUIManager(game);
-      macroGUI.addButton(new ExitButton(new Vec2(620, 0), new Vec2(20, 20)));
-      game.addMacro(macroGUI);
-
       // fullscreen option
       int fullscreen = JOptionPane.showConfirmDialog(null, "Go Fullscreen?\nRUN NORMAL In JGRASP");
       if ( fullscreen == JOptionPane.YES_OPTION ) {
          game.setFullScreen();
+         // add exit button
+         GUIManager macroGUI = new GUIManager(game);
+         macroGUI.addButton(new ExitButton(new Vec2(620, 0), new Vec2(20, 20)));
+         game.addMacro(macroGUI);
       } else if ( fullscreen == JOptionPane.CANCEL_OPTION ) {
          System.exit(0);
       } else if ( fullscreen == JOptionPane.CLOSED_OPTION ) {
