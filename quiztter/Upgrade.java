@@ -5,7 +5,6 @@ import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
-import java.awt.geom.Rectangle2D;
 import java.util.Random;
 
 import javax.swing.JOptionPane;
@@ -34,9 +33,13 @@ public class Upgrade extends GameState {
       pen.setFont(new Font("Ariel", 1, 40));
       pen.setColor(Main.scheme[0]);
       StringDraw.drawStringCenter(pen, "Downloading...", width / 2, height / 5);
-      Rectangle2D.Double clip =
-            new Rectangle2D.Double(width / 3, height / 3, width / 3, height / 3);
-      //      pen.setClip(clip);
+
+      if ( getGame().getLauncher().getBytesDownloaded() != null ) {
+         double progress = getGame().getLauncher().getBytesDownloaded() /
+               (double) getGame().getLauncher().getUpgradeSize();
+         System.out.println(getGame().getLauncher().getBytesDownloaded());
+         pen.fillRect(0, height / 3, (int) (progress * width), 30);
+      }
 
       String letters = "01";
       letters += letters.toUpperCase();
