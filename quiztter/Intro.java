@@ -36,6 +36,7 @@ public class Intro extends GameState {
    private ColorCross myBG;
    private Button myAuthButton;
    private Button myCreditsButton;
+   private Button myUpgradeButton;
    private int myCrossSteps;
    private int sineWave;
    private Sound myMusic;
@@ -65,6 +66,14 @@ public class Intro extends GameState {
       Vec2 pos = new Vec2(30, getGame().height() / 2 - 80);
       Vec2 size = new Vec2(160, 160);
       myAuthButton = new TwitterAuthButton(new AuthTwitterListener(), pos, size);
+
+      if ( !getGame().getLauncher().isLatestVersion() ) {
+         myUpgradeButton = new SimpleButton(new UpgradeListener(), "UPGRADE!",
+               new Color(150, 0, 0, 150), Color.white, new Font("Ariel", 1, 12),
+               new Vec2(340, 455), new Vec2(60, 30));
+         myUpgradeButton.getPosition().addY(100);
+      }
+
       myCreditsButton = new SimpleButton(new CreditsListener(), "CREDITS",
             new Color(0, 0, 0, 0), Color.white, new Font("Ariel", 1, 12),
             new Vec2(290, 455), new Vec2(60, 30));
@@ -133,6 +142,13 @@ public class Intro extends GameState {
             Transition toPinInput = new FadeTransition(getGame(), getGameMode(), "pininput", 100, Main.scheme[0]);
             getGame().setGameState(toPinInput);
          }
+      }
+   }
+
+   class UpgradeListener implements ActionListener {
+      @Override
+      public void actionPerformed(ActionEvent event) {
+         getGame().setGameState("");
       }
    }
 
