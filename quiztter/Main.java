@@ -14,6 +14,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
+import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -47,6 +48,13 @@ public class Main {
       // create new game and set game state
       Game game = new Game("Quiztter", gameWidth, gameHeight);
       game.setGameState("intro");
+
+      try {
+         game.getLauncher().initVersioning();
+      } catch (UnknownHostException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
 
       // Set game cursor
       int cursorWidth = 15;
@@ -92,6 +100,7 @@ public class Main {
       } else if ( fullscreen == JOptionPane.CLOSED_OPTION ) {
          System.exit(0);
       }
+
 
       // get the party started!!
       game.start();
