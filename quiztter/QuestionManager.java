@@ -21,24 +21,13 @@ public class QuestionManager {
    }
 
    public void generateGame() {
-      generateQuestions(myQuestionsAGame);
+      generateQuestions(myQuestionsAGame - myQuestions.size());
    }
 
    public void generateQuestions(int toGenerate) {
       for ( int i = 0 ; i < toGenerate; i++ ) {
-         Question newQuestion = null;
-         try {
-            newQuestion = generateQuestion();
-         } catch (NullPointerException e) {
-            i--;
-            continue;
-         } catch (IndexOutOfBoundsException e) {
-            i--;
-            continue;
-         }
-
+         Question newQuestion = generateQuestion();
          myQuestions.add(newQuestion);
-         myProgress = (int) (((double) (100 * (i + 1))) / toGenerate);
       }
    }
 
@@ -47,25 +36,28 @@ public class QuestionManager {
       while ( newQuestion == null ) {
          try {
             newQuestion = GTwitter.randomQuestion();
+            newQuestion.randomize();
          } catch (TwitterException e) {
             e.printStackTrace();
             if ( e.exceededRateLimitation() ) {
                ErrorUtil.errorAndExit("Twitter API Limit reached - try again later.");
             }
+         } catch (NullPointerException e) {
+            newQuestion = null;
+         } catch (IndexOutOfBoundsException e) {
+            newQuestion = null;
          }
       }
 
-      newQuestion.randomize();
       return newQuestion;
    }
 
-   public void resetGame() {
-      myQuestions = new LinkedList<Question>();
-      myProgress = 0;
+   public int getProgress() {
+      double scaledProgress = 100 * myQuestions.size();
+      myProgress = (int) (scaledProgress / myQuestionsAGame);
+      return myProgress;
    }
 
-
-   public int getProgress() { return myProgress; }
    public void setQuestionsAGame(int questionsAGame) { myQuestionsAGame = questionsAGame; }
    public int getQuestionsAGame() { return myQuestionsAGame; }
    public LinkedList<Question> getQuestions() { return myQuestions; }
