@@ -1,0 +1,8 @@
+currentVersionURL
+/quiztter/version.txt
+
+availableVersionURL
+https://raw.githubusercontent.com/J3698/Quiztter/master/quiztter/version.txt
+
+downloadURL
+https://raw.githubusercontent.com/J3698/Quiztter/master/release/Quiztter.jar
