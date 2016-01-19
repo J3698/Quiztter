@@ -12,8 +12,10 @@ import gfm.sound.Sound;
 
 public class GUIManager implements Macro {
    private Game myGame;
-   private String myHoverSound = null;
-   private String myClickSound = null;
+   private int myCurrHoverSound = 0;
+   private Sound[] myHoverSounds = new Sound[7];
+   private int myCurrClickSound = 0;
+   private Sound[] myClickSounds = new Sound[7];
 
    /**
     *
@@ -53,7 +55,14 @@ public class GUIManager implements Macro {
       for ( int i = 0; i < myButtons.size(); i++ ) {
          Button button = myButtons.get(i);
          if ( button.collidesPoint(event.getX(), event.getY()) ) {
-            if ( myClickSound != null ) { new Sound(myClickSound, true).play(); }
+            if ( myClickSounds[ 0 ] != null ) {
+               myClickSounds[ myCurrClickSound ].reset();
+               myClickSounds[ myCurrClickSound ].play();
+               myCurrClickSound++;
+               if ( myCurrClickSound > myClickSounds.length - 1) {
+                  myCurrClickSound = 0;
+               }
+            }
             button.doAction();
          }
       }
@@ -70,10 +79,13 @@ public class GUIManager implements Macro {
          if ( button.collidesPoint(event.getX(), event.getY())) {
             if ( button.getMouseHovering() == false ) {
                button.setMouseHovering(true);
-               if ( myHoverSound != null ) {
-                  Sound onHover = new Sound(myHoverSound, true);
-                  onHover.reset();
-                  onHover.play();
+               if ( myHoverSounds[ 0 ] != null ) {
+                  myHoverSounds[ myCurrHoverSound ].reset();
+                  myHoverSounds[ myCurrHoverSound ].play();
+                  myCurrHoverSound++;
+                  if ( myCurrHoverSound > myHoverSounds.length - 1) {
+                     myCurrHoverSound = 0;
+                  }
                }
             }
          } else {
@@ -125,11 +137,17 @@ public class GUIManager implements Macro {
    }
 
    public void setHoverSound(String sound) {
-      myHoverSound = sound;
+      myCurrHoverSound = 0;
+      for ( int i = 0; i < myHoverSounds.length; i++ ) {
+         myHoverSounds[ i ] = new Sound(sound, false);
+      }
    }
 
    public void setClickSound(String sound) {
-      myClickSound = sound;
+      myCurrClickSound = 0;
+      for ( int i = 0; i < myClickSounds.length; i++ ) {
+         myHoverSounds[ i ] = new Sound(sound, false);
+      }
    }
 
    public ArrayList<Button> getButtons() {
