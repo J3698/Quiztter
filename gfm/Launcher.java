@@ -4,6 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +19,7 @@ public class Launcher {
    private static final String digits = "0123456789";
 
    private String myAvailableVersionURL = null;
-   private String myVersionURL = null;
+   private String myCurrentVersionURL = null;
    private String myCurrentVersion = null;
    private String myLatestVersion = null;
    private String myDownloadURL = null;
@@ -44,9 +45,9 @@ public class Launcher {
          String next;
          String last = "";
          while ( (next = reader.readLine()) != null) {
-            if ( last.equals("versionURL")) {
-               myVersionURL = next;
-            } else if ( last.equals("AvailableVersionURL") ) {
+            if ( last.equals("currentVersionURL") ) {
+               myCurrentVersionURL = next;
+            } else if ( last.equals("availableVersionURL") ) {
                myAvailableVersionURL = next;
             } else if ( last.equals("downloadURL") ) {
                myDownloadURL = next;
@@ -207,14 +208,31 @@ public class Launcher {
       if ( myCurrentVersion != null ) {
          return myCurrentVersion;
       } else {
-         InputStreamReader stream  = new InputStreamReader(getClass().getResourceAsStream(myVersionURL));
+         InputStream in = getClass().getResourceAsStream(myCurrentVersionURL);
+         InputStreamReader stream  = new InputStreamReader(in);
          BufferedReader reader = new BufferedReader(stream);
 
          try {
             myCurrentVersion = reader.readLine();
             myUpgradeSize = Integer.parseInt(reader.readLine());
+         } catch (FileNotFoundException e) {
+            e.printStackTrace();
          } catch (IOException e) {
             e.printStackTrace();
+         } finally {
+            try {
+               if ( in != null) {
+                  in.close();
+               }
+               if ( stream != null) {
+                  stream.close();
+               }
+               if ( reader != null) {
+                  reader.close();
+               }
+            } catch (IOException e) {
+               e.printStackTrace();
+            }
          }
 
          return myCurrentVersion;
