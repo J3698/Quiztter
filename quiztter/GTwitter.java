@@ -5,12 +5,12 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -44,9 +44,28 @@ public class GTwitter {
    private static ArrayList<String> popHandles;
    private static ArrayList<PopularTwitterUser> popUsers;
 
-   static {
+
+
+   public void init() {
+      if ( !myIsEnabled ) { return; }
+
       readInHandles();
       readInUsers();
+      initRestOfUsers();
+
+      twitter = new TwitterFactory().getInstance();
+      twitter.setOAuthConsumer(consumerKey, consumerSecret);
+      try {
+         requestToken = twitter.getOAuthRequestToken();
+      } catch(TwitterException e) {
+         if ( e.getExceptionCode().equals("3cc69290-161493db 3cc69290-161493b1") ) {
+            ErrorUtil.error("No Internet: Disabling Online Components");
+            disable();
+         } else {
+            ErrorUtil.errorToFile(e);
+            ErrorUtil.errorAndExit("Twitter Initialization Failed");
+         }
+      }
    }
 
    private void readInHandles() {
@@ -60,9 +79,9 @@ public class GTwitter {
       BufferedReader file = null;
 
       try {
-         // open file
-         in = new InputStreamReader(
-               ClassLoader.getSystemResourceAsStream(popHandlesFile));
+         // open file);
+         InputStream is = getClass().getResourceAsStream(popHandlesFile);
+         in = new InputStreamReader(is);
          file = new BufferedReader(in);
          // read in handles
          String next;
@@ -89,7 +108,7 @@ public class GTwitter {
    public static void readInUsers() {
       // prep to deserialize popular users
       popUsers = new ArrayList<PopularTwitterUser>(numPopUsers);
-      String popUsersFile = "/quiztter/popUsers.ser";
+      String popUsersFile = "./quiztter/popUsers.ser";
       FileInputStream file = null;
       ObjectInputStream in = null;
 
@@ -105,7 +124,7 @@ public class GTwitter {
             }
          }
       } catch (FileNotFoundException e) {
-         e.printStackTrace();
+         // this is taken care of later
       } catch (IOException e) {
          e.printStackTrace();
       } catch (ClassNotFoundException e) {
@@ -125,29 +144,19 @@ public class GTwitter {
       }
    }
 
-
-
-
-
-
-   public static void init() {
-      if ( !myIsEnabled ) { return; }
-
-      twitter = new TwitterFactory().getInstance();
-      twitter.setOAuthConsumer(consumerKey, consumerSecret);
-      try {
-         requestToken = twitter.getOAuthRequestToken();
-      } catch(TwitterException e) {
-         if ( e.getExceptionCode().equals("3cc69290-161493db 3cc69290-161493b1") ) {
-            ErrorUtil.error("No Internet: Disabling Online Components");
-            disable();
-         } else {
-            ErrorUtil.errorToFile(e);
-            ErrorUtil.errorAndExit("Twitter Initialization Failed");
+   public static void initRestOfUsers() {
+      for ( String user : popHandles ) {
+         // skip if user was loaded
+         for ( PopularTwitterUser popUser : popUsers ) {
+            if ( user.equals(popUser.getHandle()) ) {
+               continue;
+            }
          }
+         // else instantiate user
+         PopularTwitterUser toAdd = new PopularTwitterUser(user);
+         popUsers.add(toAdd);
       }
    }
-
 
    public static void resetAuth() {
       if ( !myIsEnabled ) { return; }
@@ -273,25 +282,25 @@ public class GTwitter {
 
 
    private static Question compareFollowersOfUsersQuestion() throws TwitterException {
-      LinkedList<String> users = new LinkedList<String>();
-      LinkedList<String> usersCopy = new LinkedList<String>();
-      String[] mostPopUsers = new String[4];
+      LinkedList<PopularTwitterUser> users = new LinkedList<PopularTwitterUser>();
+      LinkedList<PopularTwitterUser> usersCopy = new LinkedList<PopularTwitterUser>();
+      PopularTwitterUser[] mostPopUsers = new PopularTwitterUser[4];
 
       for ( int i = 0; i < 4; i++ ) {
-         String nextUser = randomHandle();
+         PopularTwitterUser nextUser = randomUser();
          while ( users.contains(nextUser) ) {
-            nextUser = randomHandle();
+            nextUser = randomUser();
          }
          users.add(nextUser);
          usersCopy.add(nextUser);
       }
 
       for ( int i = 0; i < 4; i++ ) {
-         String max = users.get(0);
-         for ( String user : users ) {
-            int king = twitter.showUser(max).getFollowersCount();
-            int curr = twitter.showUser(user).getFollowersCount();
-            if ( curr > king ) {
+         PopularTwitterUser max = users.get(0);
+         for ( PopularTwitterUser user : users ) {
+            int currUser = user.getFollowersCount(twitter);
+            int currKing = max.getFollowersCount(twitter);
+            if ( currUser > currKing ) {
                max = user;
             }
          }
@@ -301,14 +310,16 @@ public class GTwitter {
       }
 
       String questionText =
-            "Does " + usersCopy.get(0) + ", " + usersCopy.get(1) +
-            ", " + usersCopy.get(2) + ", or " + usersCopy.get(3) +
-            " have more followers?";
+            "Does " + usersCopy.get(0).getName(twitter) + ", " +
+                  usersCopy.get(1).getName(twitter)     + ", " +
+                  usersCopy.get(2).getName(twitter)     + ", or " +
+                  usersCopy.get(3).getName(twitter)     +
+                  " have more followers?";
 
-      String ans0 = mostPopUsers[ 0 ];
-      String ans1 = mostPopUsers[ 1 ];
-      String ans2 = mostPopUsers[ 2 ];
-      String ans3 = mostPopUsers[ 3 ];
+      String ans0 = mostPopUsers[ 0 ].getName(twitter);
+      String ans1 = mostPopUsers[ 1 ].getName(twitter);
+      String ans2 = mostPopUsers[ 2 ].getName(twitter);
+      String ans3 = mostPopUsers[ 3 ].getName(twitter);
 
       return new Question(questionText, "A", ans0, ans1, ans2, ans3);
    }
