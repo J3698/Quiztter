@@ -1,12 +1,9 @@
 package quiztter;
 
 import java.awt.Desktop;
-import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -17,6 +14,7 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 import gfm.util.ErrorUtil;
+import gfm.util.GFMScanner;
 import twitter4j.Paging;
 import twitter4j.Place;
 import twitter4j.Status;
@@ -75,28 +73,19 @@ public class GTwitter {
       // prep to read in popular handles
       popHandles = new ArrayList<String>(numPopUsers);
       String popHandlesFile = "/quiztter/popHandles.txt";
-      InputStreamReader in = null;
-      BufferedReader file = null;
+      GFMScanner file = new GFMScanner(popHandlesFile);
 
       try {
-         // open file);
-         InputStream is = getClass().getResourceAsStream(popHandlesFile);
-         in = new InputStreamReader(is);
-         file = new BufferedReader(in);
          // read in handles
-         String next;
-         while ( (next = file.readLine()) != null ) {
-            popHandles.add(next);
+         while ( file.hasNextLine() ) {
+            popHandles.add(file.nextLine());
          }
       } catch (IOException e) {
          e.printStackTrace();
       } finally {
          // clean up
          try {
-            if ( in != null ) {
-               in.close();
-            }
-            if ( in != null ) {
+            if ( file != null ) {
                file.close();
             }
          } catch (IOException e) {
