@@ -66,7 +66,6 @@ public class Play extends GameState {
    // unique to play, for new games
    public void restart() {
       myQuestionRect = new QuestionRect(getGame(), Color.black, new Font("Ariel", 1, 26));
-      myQuestionManager.resetGame();
       myCurrQuestion = null;
       myAnswered = null;
       myHasColored = false;

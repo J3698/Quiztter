@@ -42,6 +42,10 @@ public class LoadingQuestions extends GameState {
 
    @Override
    public void draw(Graphics pen) {
+      int width = getGame().width();
+      int height = getGame().height();
+
+      // handle background color
       Color currColor = myBG.getCurrentColor();
       pen.setColor(currColor);
       myBG.next();
@@ -50,9 +54,8 @@ public class LoadingQuestions extends GameState {
          int index = myCurrBGColor % 2;
          myBG = new ColorCross(currColor, myBGColors[ index ], 100);
       }
-      int width = getGame().width();
-      int height = getGame().height();
       pen.fillRect(0, 0, width, height);
+
       pen.setColor(Main.scheme[5]);
       pen.setFont(new Font("Ariel", 1, 20));
       StringDraw.drawStringCenter(pen, "Loading Questions...", width / 2, height / 2 - 20);
@@ -82,7 +85,6 @@ public class LoadingQuestions extends GameState {
          public void run() {
             Play play = (Play) getGame().getGameState("play");
             try {
-               play.getQuestionManager().resetGame();
                play.getQuestionManager().generateGame();
                myIsDone = true;
             } catch (Exception e) {
