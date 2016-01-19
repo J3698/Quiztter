@@ -17,7 +17,7 @@ import javax.swing.JOptionPane;
 public class Launcher {
    private static final String digits = "0123456789";
 
-   private String myAvailableVerionURL = null;
+   private String myAvailableVersionURL = null;
    private String myVersionURL = null;
    private String myCurrentVersion = null;
    private String myLatestVersion = null;
@@ -31,10 +31,47 @@ public class Launcher {
       myGame = game;
    }
 
-   public void initVersioning(String versionURL, String newVersionURL, String downloadURL) throws UnknownHostException {
-      myVersionURL = versionURL;
-      myAvailableVerionURL = newVersionURL;
-      myDownloadURL = downloadURL;
+   public void initVersioning(String versioningFile) throws UnknownHostException {
+      InputStream in = null;
+      BufferedReader reader = null;
+      InputStreamReader inputReader = null;
+
+      try {
+         in = getClass().getResourceAsStream(versioningFile);
+         inputReader = new InputStreamReader(in);
+         reader = new BufferedReader(inputReader);
+
+         String next;
+         String last = "";
+         while ( (next = reader.readLine()) != null) {
+            if ( last.equals("versionURL")) {
+               myVersionURL = next;
+            } else if ( last.equals("AvailableVersionURL") ) {
+               myAvailableVersionURL = next;
+            } else if ( last.equals("downloadURL") ) {
+               myDownloadURL = next;
+            }
+
+            last = next;
+         }
+      } catch (IOException e) {
+         e.printStackTrace();
+      } finally {
+         try {
+            if ( in != null ) {
+               in.close();
+            }
+            if ( reader != null ) {
+               reader.close();
+            }
+            if ( inputReader != null) {
+               inputReader.close();
+            }
+         } catch (IOException e) {
+            e.printStackTrace();
+         }
+      }
+
       getLatestVersion();
       getCurrentVersion();
    }
@@ -131,7 +168,7 @@ public class Launcher {
    }
 
    public String getLatestVersion() throws UnknownHostException {
-      if ( myAvailableVerionURL == null ) {
+      if ( myAvailableVersionURL == null ) {
          throw new NullPointerException("URL to get next version number from is null.");
       }
 
@@ -142,7 +179,7 @@ public class Launcher {
 
       try {
          // get latest version
-         latestVersionURL = new URL(myAvailableVerionURL);
+         latestVersionURL = new URL(myAvailableVersionURL);
          fromWeb = new BufferedReader(
                new InputStreamReader(latestVersionURL.openStream()));
          latestVersion = fromWeb.readLine();
