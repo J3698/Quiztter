@@ -2,8 +2,11 @@ package quiztter;
 
 import java.awt.Desktop;
 import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -27,22 +30,7 @@ import twitter4j.auth.RequestToken;
 // For interacting with Twitter
 
 public class GTwitter {
-   private static String[] popHandles = {
-         "WhiteHouse", "CNN", "realDonaldTrump",
-         "HillaryClinton", "katyperry", "justinbieber",
-         "BarackObama", "YouTube", "twitter", "instagram",
-         "Cristiano", "shakira", "Drake", "KingJames",
-         "BillGates", "espn", "neymarjr", "NBA", "vine",
-         "NFL", "NASA", "google", "Starbucks", "NatGeo",
-         "Android"
-   };
-
    private static boolean myIsEnabled = true;
-
-   // Very secret
-   // Much hush hush
-   public static final String consumerKey = "jaCh0s73zKRjebHlXRq6rCK85";
-   public static final String consumerSecret = "e1xbrwOQZgkjGwPu4zxHxBaGfHKWLnhaaWqon30c6C8gJPOZFH";
 
    public static Twitter twitter = null;
 
@@ -51,6 +39,93 @@ public class GTwitter {
    public static String pin = null;
 
    public static boolean loggedIn = false;
+
+   private static int numPopUsers = 25;
+   private static ArrayList<String> popHandles;
+   private static ArrayList<PopularTwitterUser> popUsers;
+
+   static {
+      readInHandles();
+      readInUsers();
+   }
+
+   private static void readInHandles() {
+      // prep to read in popular handles
+      popHandles = new ArrayList<String>(numPopUsers);
+      String popHandlesFile = "/quiztter/popHandles.txt";
+      InputStreamReader in = null;
+      BufferedReader file = null;
+
+      try {
+         // open file
+         in = new InputStreamReader(
+               ClassLoader.getSystemResourceAsStream(popHandlesFile));
+         file = new BufferedReader(in);
+         // read in handles
+         String next;
+         while ( (next = file.readLine()) != null ) {
+            popHandles.add(next);
+         }
+      } catch (IOException e) {
+         e.printStackTrace();
+      } finally {
+         // clean up
+         try {
+            if ( in != null ) {
+               in.close();
+            }
+            if ( in != null ) {
+               file.close();
+            }
+         } catch (IOException e) {
+            e.printStackTrace();
+         }
+      }
+   }
+
+   public static void readInUsers() {
+      // prep to deserialize popular users
+      popUsers = new ArrayList<PopularTwitterUser>(numPopUsers);
+      String popUsersFile = "/quiztter/popUsers.ser";
+      FileInputStream file = null;
+      ObjectInputStream in = null;
+
+      try {
+         file = new FileInputStream(popUsersFile);
+         in = new ObjectInputStream(file);
+
+         Object obj;
+         while ( (obj = in.readObject()) != null ) {
+            PopularTwitterUser user = (PopularTwitterUser) obj;
+            if ( popHandles.contains(user.getHandle()) ) {
+               popUsers.add(user);
+            }
+         }
+      } catch (FileNotFoundException e) {
+         e.printStackTrace();
+      } catch (IOException e) {
+         e.printStackTrace();
+      } catch (ClassNotFoundException e) {
+         e.printStackTrace();
+      } finally {
+         // clean up
+         try {
+            if ( in != null ) {
+               in.close();
+            }
+            if ( in != null ) {
+               file.close();
+            }
+         } catch (IOException e) {
+            e.printStackTrace();
+         }
+      }
+   }
+
+
+
+
+
 
    public static void init() {
       if ( !myIsEnabled ) { return; }
@@ -143,9 +218,9 @@ public class GTwitter {
       return false;
    }
 
-   private static String randomHandle() {
+   private static PopularTwitterUser randomUser() {
       Random rand = new Random();
-      return popHandles[ rand.nextInt(popHandles.length) ];
+      return popUsers.get(rand.nextInt(popHandles.size()));
    }
 
    private ArrayList<Place> getStatuses(String handle, int toGet) throws TwitterException {
@@ -373,7 +448,8 @@ public class GTwitter {
 
 
 
-
+   public static final String consumerKey = "jaCh0s73zKRjebHlXRq6rCK85";
+   public static final String consumerSecret = "e1xbrwOQZgkjGwPu4zxHxBaGfHKWLnhaaWqon30c6C8gJPOZFH";
 
 
 
