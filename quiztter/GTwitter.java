@@ -49,7 +49,10 @@ public class GTwitter {
       readInUsers();
    }
 
-   private static void readInHandles() {
+   private void readInHandles() {
+      //      in = getClass().getResourceAsStream(versioningFile);
+      //      inputReader = new InputStreamReader(in);
+      //      reader = new BufferedReader(inputReader);
       // prep to read in popular handles
       popHandles = new ArrayList<String>(numPopUsers);
       String popHandlesFile = "/quiztter/popHandles.txt";

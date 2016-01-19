@@ -49,7 +49,7 @@ public class Main {
       UIManager.put("OptionPane.messageForeground", new ColorUIResource(225, 232, 237));
 
       // initialize twitter
-      GTwitter.init();
+      new GTwitter().init();
 
       // create new game and set game state
       Game game = new Game("Quiztter", gameWidth, gameHeight);
@@ -112,7 +112,6 @@ public class Main {
       frame.addWindowListener(new WindowAdapter() {
          @Override
          public void windowClosing(WindowEvent windowEvent) {
-            JOptionPane.showConfirmDialog(null, "...");
          }
       });
    }
