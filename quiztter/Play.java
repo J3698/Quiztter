@@ -82,8 +82,8 @@ public class Play extends GameState {
    @Override
    public void initUI() {
       Color color = ColorCross.alpha(Color.white, 150);
-      int width = getGame().width();
-      int height = getGame().height();
+      int width = getWidth();
+      int height = getHeight();
       Vec2 size = new Vec2(width / 2 - 15, height / 4 + 5);
       myAnsA = new AnswerButton(new ListenerA(), "A", "", color, Color.black,
             new Vec2(10, height / 2 - 30), size.copy());
@@ -108,8 +108,8 @@ public class Play extends GameState {
 
    @Override
    public void draw(Graphics pen) {
-      int width = getGame().width();
-      int height = getGame().height();
+      int width = getWidth();
+      int height = getHeight();
       pen.setColor(Main.scheme[0]);
       pen.fillRect(0, 0, width, height);
       myQuestionRect.draw(pen);
@@ -237,8 +237,8 @@ public class Play extends GameState {
       public void actionPerformed(ActionEvent event) {
          myAnswered = myAnsA;
 
-         int midX = getGame().width() / 2;
-         int midY = getGame().height() / 2;
+         int midX = getWidth() / 2;
+         int midY = getHeight() / 2;
          Vec2 middle = new Vec2(midX, midY);
          myAnsA.startExpand(20, middle, new Color(255, 255, 255, 250));
 
@@ -252,8 +252,8 @@ public class Play extends GameState {
       public void actionPerformed(ActionEvent event) {
          myAnswered = myAnsB;
 
-         int midX = getGame().width() / 2;
-         int midY = getGame().height() / 2;
+         int midX = getWidth() / 2;
+         int midY = getHeight() / 2;
          Vec2 middle = new Vec2(midX, midY);
          myAnsB.startExpand(20, middle, new Color(255, 255, 255, 250));
 
@@ -267,8 +267,8 @@ public class Play extends GameState {
       public void actionPerformed(ActionEvent event) {
          myAnswered = myAnsC;
 
-         int midX = getGame().width() / 2;
-         int midY = getGame().height() / 2;
+         int midX = getWidth() / 2;
+         int midY = getHeight() / 2;
          Vec2 middle = new Vec2(midX, midY);
          myAnsC.startExpand(20, middle, new Color(255, 255, 255, 250));
 
@@ -282,8 +282,8 @@ public class Play extends GameState {
       public void actionPerformed(ActionEvent event) {
          myAnswered = myAnsD;
 
-         int midX = getGame().width() / 2;
-         int midY = getGame().height() / 2;
+         int midX = getWidth() / 2;
+         int midY = getHeight() / 2;
          Vec2 middle = new Vec2(midX, midY);
          myAnsD.startExpand(20, middle, new Color(255, 255, 255, 250));
 

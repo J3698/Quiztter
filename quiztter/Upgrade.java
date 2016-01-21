@@ -27,8 +27,8 @@ public class Upgrade extends GameState {
 
    @Override
    public void draw(Graphics pen) {
-      int width = getGame().width();
-      int height = getGame().height();
+      int width = getWidth();
+      int height = getHeight();
 
       pen.setFont(new Font("Ariel", 1, 40));
       pen.setColor(Main.scheme[0]);

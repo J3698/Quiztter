@@ -38,8 +38,8 @@ public class GameOver extends GameState {
          message = "Lol. You lost.";
       }
 
-      int x = getGame().width();
-      int y = getGame().height();
+      int x = getWidth();
+      int y = getHeight();
       StringDraw.drawStringCenter(pen, message, x / 2, y / 2);
    }
 

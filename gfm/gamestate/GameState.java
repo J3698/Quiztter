@@ -42,6 +42,8 @@ public abstract class GameState {
    public GUIManager getGUIManager() { return myGUIManager; }
    public KeyAdapter getKeyListener() { return myKeyListener; }
    public MouseAdapter getMouseListener() { return myMouseListener; }
+   public int getWidth() { return myGame.getWidth(); }
+   public int getHeight() { return myGame.getHeight(); }
 
    public void drawOverMacro(Graphics pen) {};
 

@@ -49,8 +49,8 @@ public class PinInput extends GameState {
    @Override
    public void draw(Graphics pen) {
       pen.setColor(Main.scheme[0]);
-      int width = getGame().width();
-      int height = getGame().height();
+      int width = getWidth();
+      int height = getHeight();
       pen.fillRect(0, 0, width, height);
 
       pen.setColor(Main.scheme[2]);

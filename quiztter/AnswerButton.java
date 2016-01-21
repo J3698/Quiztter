@@ -79,8 +79,8 @@ public class AnswerButton extends BasicButton {
       myExpandSteps = expandSteps;
       myCurrExpandStep = 0;
 
-      int width = getGame().width();
-      int height = getGame().height();
+      int width = getGame().getWidth();
+      int height = getGame().getHeight();
 
       // according to hoverzoom - need to disable gui afterstartexpand
       getSize().multiply(1.1);

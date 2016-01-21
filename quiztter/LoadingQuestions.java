@@ -42,8 +42,8 @@ public class LoadingQuestions extends GameState {
 
    @Override
    public void draw(Graphics pen) {
-      int width = getGame().width();
-      int height = getGame().height();
+      int width = getWidth();
+      int height = getHeight();
 
       // handle background color
       Color currColor = myBG.getCurrentColor();

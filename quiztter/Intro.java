@@ -54,7 +54,7 @@ public class Intro extends GameState {
    @Override
    public void init() {
       quizOpacity = 0;
-      tterPos = getGame().height() * 2 / 3;
+      tterPos = getHeight() * 2 / 3;
       myCrossSteps = 250;
       myBG = new ColorCross(scheme[0], (Color) ArrayUtils.random(scheme, 1), myCrossSteps);
       sineWave = 0;
@@ -63,7 +63,7 @@ public class Intro extends GameState {
    }
    @Override
    public void initUI() {
-      Vec2 pos = new Vec2(30, getGame().height() / 2 - 80);
+      Vec2 pos = new Vec2(30, getHeight() / 2 - 80);
       Vec2 size = new Vec2(160, 160);
       myAuthButton = new TwitterAuthButton(new AuthTwitterListener(), pos, size);
 
@@ -89,8 +89,8 @@ public class Intro extends GameState {
 
    @Override
    public void draw(Graphics pen) {
-      int width = getGame().width();
-      int height = getGame().height();
+      int width = getWidth();
+      int height = getHeight();
       int wave = (int) (-10 * Math.sin(sineWave / 25.0));
 
       pen.setColor(myBG.getCurrentColor());
@@ -118,7 +118,7 @@ public class Intro extends GameState {
 
       if ( quizOpacity < 248 ) {
          quizOpacity += 2;
-      } else if ( tterPos != getGame().height() / 2 ) {
+      } else if ( tterPos != getHeight() / 2 ) {
          tterPos -= 4;
       } else {
          if ( myBG.isFinished() ) {

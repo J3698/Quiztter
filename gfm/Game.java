@@ -65,10 +65,10 @@ public class Game {
       myGameFrame.setVisible(true);
    }
 
-   public int width() { return myGamePanel.getGameWidth(); }
+   public int getWidth() { return myGamePanel.getGameWidth(); }
    public void setWidth(int width) { myGamePanel.setGameWidth(width); }
 
-   public int height() { return myGamePanel.getGameHeight(); }
+   public int getHeight() { return myGamePanel.getGameHeight(); }
    public void setHeight(int height) { myGamePanel.setGameHeight(height); }
 
    public String getName() { return myName; }
