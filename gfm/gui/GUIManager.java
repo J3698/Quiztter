@@ -8,25 +8,24 @@ import java.util.ArrayList;
 
 import gfm.Game;
 import gfm.Macro;
-import gfm.sound.Sound;
 
 public class GUIManager implements Macro {
    private Game myGame;
-   private int myCurrHoverSound = 0;
-   private Sound[] myHoverSounds = new Sound[7];
-   private int myCurrClickSound = 0;
-   private Sound[] myClickSounds = new Sound[7];
 
    /**
     *
     */
    private ArrayList<Button> myButtons;
    private boolean myDisabled;
+   private String myHoverSound;
+   private String myClickSound;
 
    public GUIManager(Game game) {
       myGame = game;
       myButtons = new ArrayList<Button>();
       myDisabled = false;
+      myHoverSound = null;
+      myClickSound = null;
    }
 
    /**
@@ -38,7 +37,8 @@ public class GUIManager implements Macro {
          Button button = myButtons.get(i);
          if (button.getMouseHovering()) {
             button.drawHovered(pen);
-         } else {
+         } 
+         else {
             button.draw(pen);
          }
       }
@@ -55,13 +55,8 @@ public class GUIManager implements Macro {
       for ( int i = 0; i < myButtons.size(); i++ ) {
          Button button = myButtons.get(i);
          if ( button.collidesPoint(event.getX(), event.getY()) ) {
-            if ( myClickSounds[ 0 ] != null ) {
-               myClickSounds[ myCurrClickSound ].reset();
-               myClickSounds[ myCurrClickSound ].play();
-               myCurrClickSound++;
-               if ( myCurrClickSound > myClickSounds.length - 1) {
-                  myCurrClickSound = 0;
-               }
+            if ( myClickSound != null) {
+               myGame.getSoundManager().play(myClickSound);
             }
             button.doAction();
          }
@@ -73,22 +68,19 @@ public class GUIManager implements Macro {
     */
    @Override
    public void mouseMoved(MouseEvent event) {
-      if ( myDisabled ) { return; }
+      if ( myDisabled ) { 
+         return; }
       for ( int i = 0; i < myButtons.size(); i++ ) {
          Button button = myButtons.get(i);
          if ( button.collidesPoint(event.getX(), event.getY())) {
             if ( button.getMouseHovering() == false ) {
-               button.setMouseHovering(true);
-               if ( myHoverSounds[ 0 ] != null ) {
-                  myHoverSounds[ myCurrHoverSound ].reset();
-                  myHoverSounds[ myCurrHoverSound ].play();
-                  myCurrHoverSound++;
-                  if ( myCurrHoverSound > myHoverSounds.length - 1) {
-                     myCurrHoverSound = 0;
-                  }
+               if ( myHoverSound != null) {
+                  myGame.getSoundManager().play(myHoverSound);
                }
+               button.setMouseHovering(true);
             }
-         } else {
+         } 
+         else {
             button.setMouseHovering(false);
          }
       }
@@ -137,17 +129,11 @@ public class GUIManager implements Macro {
    }
 
    public void setHoverSound(String sound) {
-      myCurrHoverSound = 0;
-      for ( int i = 0; i < myHoverSounds.length; i++ ) {
-         myHoverSounds[ i ] = new Sound(sound, false);
-      }
+      myHoverSound = sound;
    }
 
    public void setClickSound(String sound) {
-      myCurrClickSound = 0;
-      for ( int i = 0; i < myClickSounds.length; i++ ) {
-         myHoverSounds[ i ] = new Sound(sound, false);
-      }
+      myClickSound = sound;
    }
 
    public ArrayList<Button> getButtons() {

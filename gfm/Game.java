@@ -3,6 +3,7 @@ package gfm;
 import java.awt.Point;
 import java.awt.Toolkit;
 
+import gfm.sound.SoundManager;
 import gfm.gamestate.GameState;
 import gfm.gamestate.Transition;
 
@@ -12,12 +13,14 @@ public class Game {
    private GamePanel myGamePanel;
    private GameFrame myGameFrame;
    private Launcher myLauncher;
+   private SoundManager mySoundManager;
 
    public Game(String name, int gameWidth, int gameHeight) {
       myName = name;
       myGamePanel = new GamePanel(this, gameWidth, gameHeight, "");
       myGameFrame = new GameFrame(name, myGamePanel);
       myLauncher = new Launcher(this);
+      mySoundManager = new SoundManager();
    }
 
    public void setGameState(String gameState) {
@@ -75,4 +78,5 @@ public class Game {
    public GamePanel getGamePanel() { return myGamePanel; }
    public GameFrame getGameFrame() { return myGameFrame; }
    public Launcher getLauncher() { return myLauncher; }
+   public SoundManager getSoundManager() { return mySoundManager; }
 }

@@ -11,6 +11,7 @@ import gfm.Game;
 import gfm.KeyListener;
 import gfm.MouseListener;
 import gfm.gui.GUIManager;
+import gfm.sound.SoundManager;
 
 public abstract class GameState {
    private Game myGame;
@@ -42,6 +43,7 @@ public abstract class GameState {
    public GUIManager getGUIManager() { return myGUIManager; }
    public KeyAdapter getKeyListener() { return myKeyListener; }
    public MouseAdapter getMouseListener() { return myMouseListener; }
+   public SoundManager getSoundManager() { return myGame.getSoundManager(); }
    public int getWidth() { return myGame.getWidth(); }
    public int getHeight() { return myGame.getHeight(); }
 
