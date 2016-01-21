@@ -97,7 +97,7 @@ public class Sound {
    }
 
    public void closeIfFinished() {
-      if (! isRunning()) {
+      if ( !isRunning() ) {
          close();
       }
    }
