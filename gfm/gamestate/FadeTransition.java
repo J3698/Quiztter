@@ -35,8 +35,8 @@ public class FadeTransition extends Transition {
 
    @Override
    public void drawOverMacro(Graphics pen) {
-      int width = getGame().width();
-      int height = getGame().height();
+      int width = getWidth();
+      int height = getHeight();
       int alpha;
 
       if ( myCurrStep <= mySteps / 2 ) {

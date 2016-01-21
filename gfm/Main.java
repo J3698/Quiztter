@@ -48,7 +48,7 @@ class PlayGround extends GameState {
 
    @Override
    public void draw(Graphics pen) {
-      pen.clearRect(0, 0, getGame().width(), getGame().height());
+      pen.clearRect(0, 0, getWidth(), getHeight());
       getGUIManager().draw(pen);
    }
    @Override
@@ -64,12 +64,12 @@ class PlayGround extends GameState {
       getGUIManager().addButton(
             new MenuButton(
                   new AddGameStateListener(), "New G S", new Vec2(50, 50), new Vec2(90, 90),
-                  getGame().width(), getGame().height()));
+                  getWidth(), getHeight()));
 
       getGUIManager().addButton(
             new MenuButton(
                   new AddMainListener(), "New Main", new Vec2(150, 50), new Vec2(90, 90),
-                  getGame().width(), getGame().height()));
+                  getWidth(), getHeight()));
    }
 
    private class AddGameStateListener implements ActionListener {

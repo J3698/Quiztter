@@ -23,8 +23,8 @@ public class QuestionRect {
    }
 
    public void draw(Graphics pen) {
-      int width = myGame.width();
-      int height = myGame.height();
+      int width = myGame.getWidth();
+      int height = myGame.getHeight();
 
       pen.setColor(ColorCross.alpha(Color.white, 180));
       // draw translucent box

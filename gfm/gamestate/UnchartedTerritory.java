@@ -20,8 +20,8 @@ public class UnchartedTerritory extends GameState {
    public void draw(Graphics pen) {
       pen.setFont(new Font("Ariel", 1, 30));
       pen.setColor(Color.green);
-      int x = getGame().width() / 2;
-      int y = getGame().height() / 2;
+      int x = getWidth() / 2;
+      int y = getHeight() / 2;
       StringDraw.drawStringCenter(pen, "Seems The Dev Sent You To Nowhere...", x, y);
    }
 
