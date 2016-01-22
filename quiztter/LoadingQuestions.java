@@ -86,6 +86,7 @@ public class LoadingQuestions extends GameState {
             Play play = (Play) getGame().getGameState("play");
             try {
                play.getQuestionManager().generateGame();
+               GTwitter.saveUsers();
                myIsDone = true;
             } catch (Exception e) {
                e.printStackTrace();

@@ -1,10 +1,13 @@
 package quiztter;
 
 import java.awt.Desktop;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -67,9 +70,6 @@ public class GTwitter {
    }
 
    private void readInHandles() {
-      //      in = getClass().getResourceAsStream(versioningFile);
-      //      inputReader = new InputStreamReader(in);
-      //      reader = new BufferedReader(inputReader);
       // prep to read in popular handles
       popHandles = new ArrayList<String>(numPopUsers);
       String popHandlesFile = "/quiztter/popHandles.txt";
@@ -97,7 +97,7 @@ public class GTwitter {
    public static void readInUsers() {
       // prep to deserialize popular users
       popUsers = new ArrayList<PopularTwitterUser>(numPopUsers);
-      String popUsersFile = "./quiztter/popUsers.ser";
+      String popUsersFile = "./popUsers.ser";
       FileInputStream file = null;
       ObjectInputStream in = null;
 
@@ -105,8 +105,10 @@ public class GTwitter {
          file = new FileInputStream(popUsersFile);
          in = new ObjectInputStream(file);
 
+         int num = in.readInt();
          Object obj;
-         while ( (obj = in.readObject()) != null ) {
+         for ( int i = 0; i < num; i++ ) {
+            obj = in.readObject();
             PopularTwitterUser user = (PopularTwitterUser) obj;
             if ( popHandles.contains(user.getHandle()) ) {
                popUsers.add(user);
@@ -144,6 +146,37 @@ public class GTwitter {
          // else instantiate user
          PopularTwitterUser toAdd = new PopularTwitterUser(user);
          popUsers.add(toAdd);
+      }
+   }
+
+   public static void saveUsers() {
+      String popUsersFile = "./popUsers.ser";
+      System.out.println(popUsersFile);
+      FileOutputStream out = null;
+      ObjectOutputStream objOut = null;
+
+      try {
+         out = new FileOutputStream(new File(popUsersFile));
+         objOut = new ObjectOutputStream(out);
+         objOut.writeInt(popUsers.size());
+         for ( PopularTwitterUser user : popUsers ) {
+            objOut.writeObject(user);
+         }
+      } catch (FileNotFoundException e) {
+         e.printStackTrace();
+      } catch (IOException e) {
+         e.printStackTrace();
+      } finally {
+         try {
+            if ( objOut != null ) {
+               objOut.close();
+            }
+            if ( out != null ) {
+               out.close();
+            }
+         } catch (IOException e) {
+            e.printStackTrace();
+         }
       }
    }
 
