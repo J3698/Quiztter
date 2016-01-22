@@ -17,9 +17,11 @@ import gfm.gamestate.GameState;
 import gfm.util.Vec2;
 
 public class Play extends GameState {
-   private static Color[] colorScheme = new Color[]
-         { Color.black, Color.gray, Color.blue, Color.green,
-               Color.orange, Color.red                          };
+   private static Color[] colorScheme = new Color[] {
+         Color.black, Color.gray,
+         Color.blue, Color.green,
+         Color.orange, Color.red
+   };
 
    private Paddle myPaddle;
    private Ball myBall;
@@ -27,8 +29,8 @@ public class Play extends GameState {
 
    public Play(Game game) {
       super(game);
-      myPaddle = new Paddle(new Vec2(320, 465), new Vec2(90, 10), 0,
-            getGame().width());
+      myPaddle = new Paddle(new Vec2(320, 465),
+            new Vec2(90, 10), 0, getWidth());
       myBall = new Ball(new Vec2(30 + new Random().nextInt(610), 440));
       myBlocks = new LinkedList<Block>();
       String filename = JOptionPane.showInputDialog("ToLoad: ");
@@ -40,7 +42,7 @@ public class Play extends GameState {
    public Play(Game game, String gameMode) {
       super(game, gameMode);
       myPaddle = new Paddle(
-            new Vec2(320, 465), new Vec2(90, 10), 0, getGame().width());
+            new Vec2(320, 465), new Vec2(90, 10), 0, getWidth());
       myBlocks = new LinkedList<Block>();
    }
 
@@ -61,7 +63,7 @@ public class Play extends GameState {
       if ( myBall.getPos().getX() - myBall.getSize().getX() / 2 < 0 &&
             myBall.getVelocity().getX() < 0) {
          myBall.getVelocity().multiplyX(-1);
-      } else if ( myBall.getPos().getX() + myBall.getSize().getX() / 2 > getGame().width() &&
+      } else if ( myBall.getPos().getX() + myBall.getSize().getX() / 2 > getWidth() &&
             myBall.getVelocity().getX() > 0) {
          myBall.getVelocity().multiplyX(-1);
       }
@@ -69,7 +71,7 @@ public class Play extends GameState {
       if ( myBall.getPos().getY() - myBall.getSize().getY() / 2 < 0 &&
             myBall.getVelocity().getY() < 0) {
          myBall.getVelocity().multiplyY(-1);
-      } else if ( myBall.getPos().getY() + myBall.getSize().getY() / 2 > getGame().height() &&
+      } else if ( myBall.getPos().getY() + myBall.getSize().getY() / 2 > getHeight() &&
             myBall.getVelocity().getY() > 0) {
          System.exit(0);
       }
