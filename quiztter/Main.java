@@ -13,8 +13,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Toolkit;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.net.UnknownHostException;
 
@@ -23,7 +21,6 @@ import javax.swing.UIManager;
 import javax.swing.plaf.ColorUIResource;
 
 import gfm.Game;
-import gfm.GameFrame;
 import gfm.gamestate.GameState;
 import gfm.gui.GUIManager;
 import gfm.util.Vec2;
@@ -90,14 +87,11 @@ public class Main {
          GUIManager macroGUI = new GUIManager(game);
          macroGUI.addButton(new ExitButton(new Vec2(620, 0), new Vec2(20, 20)));
          game.addMacro(macroGUI);
-      } else if ( fullscreen == JOptionPane.NO_OPTION ) {
-         addSaveOnExitListener(game);
       } else if ( fullscreen == JOptionPane.CANCEL_OPTION ) {
          System.exit(0);
       } else if ( fullscreen == JOptionPane.CLOSED_OPTION ) {
          System.exit(0);
       }
-
 
       // get the party started!!
       game.start();
@@ -105,15 +99,6 @@ public class Main {
       // TODO
       // System.out.println("Sound Button Macro");
       // System.out.println("Music Player Class For Game");
-   }
-
-   public static void addSaveOnExitListener(Game game) {
-      GameFrame frame = game.getGameFrame();
-      frame.addWindowListener(new WindowAdapter() {
-         @Override
-         public void windowClosing(WindowEvent windowEvent) {
-         }
-      });
    }
 
    public static void makeTwitterCursor(Game game) {
