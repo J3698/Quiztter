@@ -1,6 +1,8 @@
+# Other
+popUsers.ser
+
 # Java
 *.class
-
 
 # Windows image file caches
 Thumbs.db
