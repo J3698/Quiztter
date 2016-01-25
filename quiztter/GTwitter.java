@@ -18,9 +18,6 @@ import javax.swing.JOptionPane;
 
 import gfm.util.ErrorUtil;
 import gfm.util.GFMScanner;
-import twitter4j.Paging;
-import twitter4j.Place;
-import twitter4j.Status;
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
@@ -30,6 +27,10 @@ import twitter4j.auth.RequestToken;
 // Mostly Public Static Class (Sorry)
 // For interacting with Twitter
 
+/**
+ * @author Antioch Sanders
+ *
+ */
 public class GTwitter {
    private static boolean myIsEnabled = true;
 
@@ -149,6 +150,9 @@ public class GTwitter {
       }
    }
 
+   /**
+    *
+    */
    public static void saveUsers() {
       String popUsersFile = "./popUsers.ser";
       System.out.println(popUsersFile);
@@ -255,28 +259,6 @@ public class GTwitter {
    private static PopularTwitterUser randomUser() {
       Random rand = new Random();
       return popUsers.get(rand.nextInt(popHandles.size()));
-   }
-
-   private ArrayList<Place> getStatuses(String handle, int toGet) throws TwitterException {
-      if ( toGet < 0 ) {
-         throw new IllegalArgumentException("Can't get negative amount of statuses.");
-      }
-
-      ArrayList<Status> statuses = new ArrayList<Status>();
-
-      Paging page = new Paging(1, 50);
-      int pagesToGet = toGet / 50;
-      if ( toGet % 50 != 0 ) {
-         pagesToGet++;
-      }
-
-      for ( int p = 1; p <= pagesToGet; p++ ) {
-         page.setPage(p);
-         statuses.addAll(twitter.getUserTimeline(handle, page));
-      }
-
-
-      return null;
    }
 
    public static Question randomQuestion() throws TwitterException {
