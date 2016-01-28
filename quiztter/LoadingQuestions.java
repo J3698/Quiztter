@@ -99,7 +99,7 @@ public class LoadingQuestions extends GameState {
    }
 
    @Override
-   public void initUI() { }
+   public void initGUI() { }
 
    @Override
    public void keyPressed(KeyEvent event) { }

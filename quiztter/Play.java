@@ -74,13 +74,13 @@ public class Play extends GameState {
       myLives = myMaxLives;
       getGUIManager().deleteAllButtons();
       getGUIManager().enable();
-      initUI();
+      initGUI();
    }
 
 
 
    @Override
-   public void initUI() {
+   public void initGUI() {
       Color color = ColorCross.alpha(Color.white, 150);
       int width = getWidth();
       int height = getHeight();
@@ -93,12 +93,20 @@ public class Play extends GameState {
             new Vec2(10, height * 3 / 4 - 15), size.copy());
       myAnsD = new AnswerButton(new ListenerD(), "D", "", color, Color.black,
             new Vec2(width / 2 + 5, height * 3 / 4 - 15), size.copy());
+
+      myAnsA.setClickSound("/quiztter/low_button");
+      myAnsA.setHoverSound("/quiztter/high_button");
+      myAnsB.setClickSound("/quiztter/low_button");
+      myAnsB.setHoverSound("/quiztter/high_button");
+      myAnsC.setClickSound("/quiztter/low_button");
+      myAnsC.setHoverSound("/quiztter/high_button");
+      myAnsD.setClickSound("/quiztter/low_button");
+      myAnsD.setHoverSound("/quiztter/high_button");
+
       getGUIManager().addButton(myAnsA);
       getGUIManager().addButton(myAnsB);
       getGUIManager().addButton(myAnsC);
       getGUIManager().addButton(myAnsD);
-      getGUIManager().setClickSound("/quiztter/low_button");
-      getGUIManager().setHoverSound("/quiztter/high_button");
    }
 
 

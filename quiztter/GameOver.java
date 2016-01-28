@@ -67,7 +67,7 @@ public class GameOver extends GameState {
    }
 
    @Override
-   public void initUI() {
+   public void initGUI() {
       // TODO Auto-generated method stub
 
    }

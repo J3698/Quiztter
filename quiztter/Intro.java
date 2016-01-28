@@ -62,7 +62,7 @@ public class Intro extends GameState {
       myMusicStarted = false;
    }
    @Override
-   public void initUI() {
+   public void initGUI() {
       Vec2 pos = new Vec2(30, getHeight() / 2 - 80);
       Vec2 size = new Vec2(160, 160);
       myAuthButton = new TwitterAuthButton(new AuthTwitterListener(), pos, size);

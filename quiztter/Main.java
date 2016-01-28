@@ -36,6 +36,9 @@ public class Main {
    public static int gameWidth = (int) (640);
    public static int gameHeight = (int) (480);
 
+   public static int drawWidth = (int) (1.2 * gameWidth);
+   public static int drawHeight = (int) (1.2 * gameHeight);
+
    public static final int questionsAGame = 5;
    public static final int lives = 3;
 
@@ -49,7 +52,8 @@ public class Main {
       new GTwitter().init();
 
       // create new game and set game state
-      Game game = new Game("Quiztter", gameWidth, gameHeight);
+      Game game = new Game("Quiztter",
+            gameWidth, gameHeight,drawWidth, drawHeight);
       game.setGameState("intro");
 
       // handle versioning

@@ -82,7 +82,7 @@ public class Upgrade extends GameState {
    }
 
    @Override
-   public void initUI() {
+   public void initGUI() {
    }
 
    @Override

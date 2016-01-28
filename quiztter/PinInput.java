@@ -42,7 +42,7 @@ public class PinInput extends GameState {
       myTick = 0;
    }
    @Override
-   public void initUI() {
+   public void initGUI() {
       //      getGUIManager.addButton(new )
    }
 
