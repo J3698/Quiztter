@@ -47,9 +47,13 @@ public class ExitButton extends BasicButton {
                "Music: Elizabeth Sherrock ->\n" +
                "        https://soundcloud.com/lizzyd710\n" +
                "Sound: www.freesfx.co.uk\n" +
-               "API: twitter4j.org\n" + "Support: You :)";
-         JOptionPane.showMessageDialog(null, message);
-         System.exit(0);
+               "API: twitter4j.org\n" + "Support: You :)\n" + 
+               "Exit?";
+         int return = JOptionPane.showConfirmDialog(null, message);
+         
+         if ( return == JOptionPane.YES_OPTION) {   
+            System.exit(0);
+         }
       }
    }
 }
