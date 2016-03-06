@@ -71,7 +71,7 @@ public class Intro extends GameState {
          myUpgradeButton = new SimpleButton(new UpgradeListener(), "UPGRADE",
                new Color(150, 0, 0, 150), Color.white, new Font("Ariel", 1, 12),
                new Vec2(240, 445), new Vec2(70, 35));
-         myUpgradeButton.getPosition().addY(100);
+         myUpgradeButton.getPos().addY(100);
          getGUIManager().addButton(myUpgradeButton);
 
          myCreditsButton = new SimpleButton(new CreditsListener(), "CREDITS",
@@ -83,7 +83,7 @@ public class Intro extends GameState {
                new Vec2(290, 455), new Vec2(60, 30));
       }
 
-      myCreditsButton.getPosition().addY(100);
+      myCreditsButton.getPos().addY(100);
       getGUIManager().addButton(myCreditsButton);
    }
 
@@ -129,9 +129,9 @@ public class Intro extends GameState {
 
          if ( !loginButtonCreated ) {
             getGUIManager().addButton(myAuthButton);
-            myCreditsButton.getPosition().subY(100);
+            myCreditsButton.getPos().subY(100);
             if ( myUpgradeButton != null ) {
-               myUpgradeButton.getPosition().subY(100);
+               myUpgradeButton.getPos().subY(100);
             }
 
             loginButtonCreated = true;
