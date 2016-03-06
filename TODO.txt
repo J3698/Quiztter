@@ -1,0 +1,4 @@
+-Save data on exit
+-Launcher/Folder for program
+-More data/request
+-Coufnt re-queries
