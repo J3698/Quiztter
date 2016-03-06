@@ -54,7 +54,7 @@ public class PopularWordFinder {
       if ( s.length() <= 2) { return ""; }
 
       String toReturn = "";
-      String punct = "`~!@#$%^&*()_+-={}|[]\\:\";'<>?,./";
+      String punct = "`~!@#$%^&*()_+-\t\n={}|[]\\:\";'<>?,./";
 
       for ( int i = 0; i < s.length(); i++ ) {
          if ( !punct.contains(s.substring(i, i + 1)) ) {
