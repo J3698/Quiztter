@@ -30,7 +30,7 @@ public class AnswerButton extends BasicButton {
       myCurrExpandStep = 0;
       myBG = null;
       myOrigSize = getSize().copy();
-      myOrigPos = getPosition().copy();
+      myOrigPos = getPos().copy();
       myOrigColor = new Color(getBodyColor().getRed(), getBodyColor().getGreen(),
             getBodyColor().getBlue(), getBodyColor().getAlpha());
    }
@@ -50,8 +50,8 @@ public class AnswerButton extends BasicButton {
       }
       pen.setColor(getBodyColor());
 
-      int x = (int) getPosition().getX();
-      int y = (int) getPosition().getY();
+      int x = (int) getPos().getX();
+      int y = (int) getPos().getY();
       int width = (int) getSize().getX();
       int height = (int) getSize().getY();
       pen.fillRect(x, y, width, height);
@@ -66,12 +66,12 @@ public class AnswerButton extends BasicButton {
    public void drawHovered(Graphics pen) {
       Vec2 offset = getSize().copy();
       offset.multiply(0.05);
-      getPosition().subVector(offset);
+      getPos().subVector(offset);
       Vec2 zoom = getSize().copy();
       zoom.multiply(0.1);
       getSize().addVector(zoom);
       draw(pen);
-      getPosition().addVector(offset);
+      getPos().addVector(offset);
       getSize().subVector(zoom);
    }
 
@@ -92,7 +92,7 @@ public class AnswerButton extends BasicButton {
       myExpandMotion = new Vec2(width / 2.0, height / 2.0);
       Vec2 toSub = getSize().copy();
       toSub.divide(2.0);
-      toSub.addVector(getPosition());
+      toSub.addVector(getPos());
       myExpandMotion.subVector(toSub);
       myExpandMotion.divide(myExpandSteps);
 
@@ -105,11 +105,11 @@ public class AnswerButton extends BasicButton {
       }
       myCurrExpandStep++;
 
-      getPosition().addVector(myExpandMotion);
+      getPos().addVector(myExpandMotion);
       getSize().addVector(myExpandGrowth);
       Vec2 correct = myExpandGrowth.copy();
       correct.divide(2.0);
-      getPosition().subVector(correct);
+      getPos().subVector(correct);
    }
 
    public boolean doneExpanding() {
@@ -125,7 +125,7 @@ public class AnswerButton extends BasicButton {
    public ColorCross getBG() { return myBG; }
 
    public void reset() {
-      setPosition(myOrigPos.copy());
+      setPos(myOrigPos.copy());
       setSize(myOrigSize.copy());
       setBodyColor(myOrigColor);
    }

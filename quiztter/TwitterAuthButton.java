@@ -26,8 +26,8 @@ public class TwitterAuthButton extends BasicButton {
 
    @Override
    public void draw(Graphics pen) {
-      int x = (int) (getPosition().getX());
-      int y = (int) (getPosition().getY());
+      int x = (int) (getPos().getX());
+      int y = (int) (getPos().getY());
       int width = (int) getSize().getX();
       int height = (int) getSize().getY();
 
@@ -51,10 +51,10 @@ public class TwitterAuthButton extends BasicButton {
 
    @Override
    public void drawHovered(Graphics pen) {
-      getPosition().subVector(new Vec2(5, 5));
+      getPos().subVector(new Vec2(5, 5));
       getSize().addVector(new Vec2(10, 10));
       draw(pen);
-      getPosition().addVector(new Vec2(5, 5));
+      getPos().addVector(new Vec2(5, 5));
       getSize().subVector(new Vec2(10, 10));
    }
 }

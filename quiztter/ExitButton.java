@@ -22,8 +22,8 @@ public class ExitButton extends BasicButton {
 
    @Override
    public void draw(Graphics pen) {
-      int x = (int) getPosition().getX();
-      int y = (int) getPosition().getY();
+      int x = (int) getPos().getX();
+      int y = (int) getPos().getY();
       int width = (int) getSize().getX();
       int height = (int) getSize().getY();
       pen.setColor(Main.scheme[0].darker());
