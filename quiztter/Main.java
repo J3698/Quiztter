@@ -52,8 +52,8 @@ public class Main {
       new GTwitter().init();
 
       // create new game and set game state
-      Game game = new Game("Quiztter",
-            gameWidth, gameHeight,drawWidth, drawHeight);
+      Game game = new Game(
+         "Quiztter", gameWidth, gameHeight,drawWidth, drawHeight);
       game.setGameState("intro");
 
       // handle versioning
