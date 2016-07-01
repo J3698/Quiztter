@@ -10,10 +10,13 @@ import java.util.Random;
 import javax.swing.JOptionPane;
 
 import gfm.Game;
+import gfm.Launcher;
 import gfm.gamestate.GameState;
 import gfm.util.StringDraw;
 
 public class Upgrade extends GameState {
+   private static final String letters = "01";
+
    private volatile boolean myStarted;
    private volatile boolean myFinished;
    private volatile boolean myWasSuccesful;
@@ -37,19 +40,16 @@ public class Upgrade extends GameState {
       if ( getGame().getLauncher().getBytesDownloaded() != null ) {
          double progress = getGame().getLauncher().getBytesDownloaded() /
                (double) getGame().getLauncher().getUpgradeSize();
-         System.out.println(getGame().getLauncher().getBytesDownloaded());
          pen.fillRect(0, height / 3, (int) (progress * width), 30);
       }
 
-      String letters = "01";
-      letters += letters.toUpperCase();
-      Random chooser = new Random();
+      Random rng = new Random();
       pen.setFont(new Font("Ariel", 1, 15));
 
       for ( int i = 0; i < 100; i++ ) {
-         int x = chooser.nextInt(width);
-         int y = chooser.nextInt(height);
-         int letter = chooser.nextInt(letters.length());
+         int x = rng.nextInt(width);
+         int y = rng.nextInt(height);
+         int letter = rng.nextInt(letters.length());
 
          pen.drawString("" + letters.charAt(letter), x, y);
       }
@@ -75,7 +75,8 @@ public class Upgrade extends GameState {
       new Thread() {
          @Override
          public void run() {
-            myWasSuccesful = getGame().getLauncher().downloadLatestVersion();
+            Launcher launcher = getGame().getLauncher();
+            myWasSuccesful = launcher.downloadLatestVersion();
             myFinished = true;
          }
       }.start();
